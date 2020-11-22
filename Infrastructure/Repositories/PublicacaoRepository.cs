@@ -12,14 +12,14 @@ namespace Infrastructure.Repositories
 {
     public class PublicacaoRepository : IPublicacaoRepository
     {
-        private readonly PortalDoColaboradorDataContext _context;
+        private readonly ModeloDataContext _context;
 
-        public PublicacaoRepository(PortalDoColaboradorDataContext context)
+        public PublicacaoRepository(ModeloDataContext context)
         {
             _context = context;
         }
 
-        public PublicacaoQueryResult BuscarPublicacao(Guid idPublicacao)
+        public PublicacaoQueryResult Buscar(Guid idPublicacao)
         {
             using (SqlConnection connection = new SqlConnection(_context.ConnectionString))
             {
@@ -38,9 +38,9 @@ namespace Infrastructure.Repositories
                           ,P.DataPublicacao
 	                     ,T.Titulo AS Tema
 	                     ,I.Titulo AS TipoDeConteudo
-                      FROM { _context.PrefixCMS }[Publicacao] AS P
-                      INNER JOIN { _context.PrefixCMS }[Tema] AS T ON P.IdTema = T.IdTema
-                      INNER JOIN { _context.PrefixCMS }[Indicador] AS I ON P.IdTipoDeConteudo = I.IdIndicador
+                      FROM [Publicacao] AS P
+                      INNER JOIN [Tema] AS T ON P.IdTema = T.IdTema
+                      INNER JOIN [Indicador] AS I ON P.IdTipoDeConteudo = I.IdIndicador
                     WHERE P.IdPublicacao = '{ idPublicacao }'";
 
                     connection.Open();
@@ -56,24 +56,8 @@ namespace Infrastructure.Repositories
             }
         }
 
-        public IEnumerable<TipoDeConteudoQueryResult> ListarTipoDeConteudo()
-        {
-            using (SqlConnection connection = new SqlConnection(_context.ConnectionString))
-            {
-                try
-                {
-                    connection.Open();
-                    var sql = $@"SELECT IdIndicador AS IdIndicador, Titulo FROM { _context.PrefixCMS }[Indicador] WHERE IdTipoIndicador = '8520C92D-021C-4332-BE5B-904730C0D610' ORDER BY 2";
-                    return connection.Query<TipoDeConteudoQueryResult>(sql);
-                }
-                catch (Exception ex)
-                {
-                    return null;
-                }
-            }
-        }
 
-        public IEnumerable<PublicacaoQueryResult> PesquisarPublicacao(Guid? idTipoDeConteudo, Guid? idTema, string textoDaBusca)
+        public IEnumerable<PublicacaoQueryResult> Pesquisar(Guid? idTema, string textoDaBusca)
         {
             using (SqlConnection connection = new SqlConnection(_context.ConnectionString))
             {
@@ -83,9 +67,6 @@ namespace Infrastructure.Repositories
                     if (idTema.HasValue)
                         whereTema = $@" P.IdTema = '{ idTema }' AND ";
 
-                    string whereTipoConteudo = "";
-                    if (idTipoDeConteudo.HasValue)
-                        whereTipoConteudo = $@" P.IdTipoDeConteudo = '{ idTipoDeConteudo }' AND ";
 
                     var sqlDocumentos = $@"
                     SELECT P.IdPublicacao
@@ -101,10 +82,10 @@ namespace Infrastructure.Repositories
                           ,P.DataPublicacao
 	                     ,T.Titulo AS Tema
 	                     ,I.Titulo AS TipoDeConteudo
-                      FROM { _context.PrefixCMS }[Publicacao] AS P
-                      INNER JOIN { _context.PrefixCMS }[Tema] AS T ON P.IdTema = T.IdTema
-                      INNER JOIN { _context.PrefixCMS }[Indicador] AS I ON P.IdTipoDeConteudo = I.IdIndicador
-                    WHERE P.Ativo = 1 AND {whereTipoConteudo} {whereTema} (P.Titulo LIKE '%{ textoDaBusca }%' OR P.Chamada LIKE '%{ textoDaBusca }%')
+                      FROM [Publicacao] AS P
+                      INNER JOIN [Tema] AS T ON P.IdTema = T.IdTema
+                      INNER JOIN [Indicador] AS I ON P.IdTipoDeConteudo = I.IdIndicador
+                    WHERE P.Ativo = 1 AND {whereTema} (P.Titulo LIKE '%{ textoDaBusca }%' OR P.Chamada LIKE '%{ textoDaBusca }%')
                     ORDER BY P.DataPublicacao DESC";
 
                     connection.Open();
@@ -120,7 +101,7 @@ namespace Infrastructure.Repositories
             }
         }
 
-        public bool SalvarPublicacao(Publicacao publicacao)
+        public bool Salvar(Publicacao publicacao)
         {
             try
             {
@@ -132,7 +113,7 @@ namespace Infrastructure.Repositories
                         try
                         {
                             connection.Open();
-                            var sql = $@"UPDATE { _context.PrefixCMS }[Publicacao]
+                            var sql = $@"UPDATE [Publicacao]
                                          SET [IdTema] = @IdTema
                                             ,[IdTipoDeConteudo] = @IdTipoDeConteudo
                                             ,[Identificador] = @Identificador
@@ -150,17 +131,11 @@ namespace Infrastructure.Repositories
 
                             connection.Execute(sql, new
                             {
-                                IdTema = publicacao.IdTema,
-                                IdTipoDeConteudo = publicacao.IdTipoDeConteudo,
                                 Identificador = publicacao.Identificador,
-                                Chamada = publicacao.Chamada,
                                 Conteudo = publicacao.Conteudo,
-                                Tags = publicacao.Tags,
                                 Ativo = publicacao.Ativo,
                                 DataCadastro = publicacao.DataCadastro,
-                                DataPublicacao = publicacao.DataPublicacao,
-                                Binario = publicacao.Binario,
-                                ImagemCapa = publicacao.ImagemCapa
+                                DataPublicacao = publicacao.DataPublicacao
                             });
                             return true;
                         }
@@ -183,65 +158,10 @@ namespace Infrastructure.Repositories
             }
         }
 
-        public bool SalvarArquivos(Publicacao publicacao)
+
+        public bool Desativar(Publicacao obj)
         {
-
-            try
-            {
-                var obj = _context.Publicacao.Where(c => c.IdPublicacao.Equals(publicacao.IdPublicacao)).FirstOrDefault();
-                if (obj != null)
-                {
-                    using (SqlConnection connection = new SqlConnection(_context.ConnectionString))
-                    {
-                        connection.Open();
-                        if (publicacao.ImagemCapa != null)
-                        {                         
-                            var sql = $@"UPDATE { _context.PrefixCMS }[Publicacao]
-                                         SET   [ImagemCapa] = @ImagemCapa
-                                         WHERE [IdPublicacao] = @IdPublicacao
-                                        ";
-
-                            connection.Execute(sql, 
-                                new {
-                                    ImagemCapa = publicacao.ImagemCapa,
-                                    IdPublicacao = publicacao.IdPublicacao
-                                });
-                        } 
-
-                        if (publicacao.Binario != null)
-                        {
-                            var sql = $@"UPDATE { _context.PrefixCMS }[Publicacao]
-                                         SET   [Binario] = @Binario
-                                         WHERE [IdPublicacao] = @IdPublicacao
-                                        ";
-
-                            connection.Execute(sql,
-                                new
-                                {
-                                    Binario = publicacao.Binario,
-                                    IdPublicacao = publicacao.IdPublicacao
-                                });
-                        }
-                       
-
-                        try
-                        {
-                            
-                            return true;
-                        }
-                        catch
-                        {
-                            return false;
-                        }
-                    }                    
-
-                }
-                return false;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Erro ao salvar Tema: " + ex.Message, ex);
-            }
+            throw new NotImplementedException();
         }
     }
 }

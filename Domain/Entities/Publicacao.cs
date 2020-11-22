@@ -16,16 +16,18 @@ namespace Domain.Entities
         public DateTime DataCadastro { get; private set; }
         public DateTime DataPublicacao { get; private set; }
 
-        readonly IList<Tema> _temas;
-        public IReadOnlyCollection<Tema> Temas => _temas.ToArray();
+        readonly IList<PublicacaoTema> _publicacaoTemas;
+        public IReadOnlyCollection<PublicacaoTema> PublicacoesTemas => _publicacaoTemas.ToArray();
 
         public Publicacao()
         {
-
+            _publicacaoTemas = new List<PublicacaoTema>();
         }
 
         public Publicacao(Guid? idPublicacao, string identificador, string titulo, string conteudo, DateTime dataPublicacao)
         {
+            _publicacaoTemas = new List<PublicacaoTema>();
+
             if (idPublicacao == Guid.Empty || idPublicacao == null)
                 IdPublicacao = Guid.NewGuid();
             else

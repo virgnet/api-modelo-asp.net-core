@@ -12,17 +12,17 @@ namespace Domain.Entities
         public string Titulo { get; private set; }
         public bool Ativo { get; private set; }
 
-        private readonly IList<Publicacao> _publicacoes;
-        public IReadOnlyCollection<Publicacao> Publicacoes => _publicacoes.ToArray();
+        readonly IList<PublicacaoTema> _publicacaoTemas;
+        public IReadOnlyCollection<PublicacaoTema> PublicacoesTemas => _publicacaoTemas.ToArray();
 
         public Tema()
         {
-            _publicacoes = new List<Publicacao>();
+            _publicacaoTemas = new List<PublicacaoTema>();
         }
 
         public Tema(Guid? idTema, string titulo, string tags, string descricao, Byte[] imagem)
         {
-            _publicacoes = new List<Publicacao>();
+            _publicacaoTemas = new List<PublicacaoTema>();
 
             if (idTema == null)
                 IdTema = Guid.NewGuid();

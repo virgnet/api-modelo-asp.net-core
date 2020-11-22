@@ -7,18 +7,11 @@ namespace Domain.Repositories
 {
     public interface ITemaRepository
     {
-        IEnumerable<TemaQueryResult> PesquisarTema(string textoDaBusca);
-        IEnumerable<TemaQueryResult> PesquisarTodosTemas();
-        TemaQueryResult BuscarTema(Guid id);
-        bool SalvarTema(Tema tema);
-        bool SalvarTemaRelacionamento(TemaRelacionamento relacionamento);
-        bool DesativarTema(Guid id);
-        bool ExcluirTemaRelacionamento(Guid id);
-
-        //Apoio
-        IEnumerable<AreaQueryResult> PesquisarArea(string textoDaBusca);
-        IEnumerable<SistemaQueryResult> PesquisarSistema(string textoDaBusca);
-        IEnumerable<DocumentoQueryResult> PesquisarDocumento(string textoDaBusca);
-        IEnumerable<ProjetoQueryResult> PesquisarProjeto(string textoDaBusca);
+        IEnumerable<TemaQueryResult> Pesquisar(string textoDaBusca);
+        IEnumerable<TemaQueryResult> PesquisarTodos();
+        TemaQueryResult Buscar(Guid id);
+        bool Salvar(Tema obj);
+        bool Desativar(Guid id);
+        bool Excluir(Guid id);
     }
 }

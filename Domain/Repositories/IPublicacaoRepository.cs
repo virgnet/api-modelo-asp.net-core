@@ -7,11 +7,9 @@ namespace Domain.Repositories
 {
     public interface IPublicacaoRepository
     {
-        IEnumerable<PublicacaoQueryResult> PesquisarPublicacao(Guid? idTipoDeConteudo, Guid? idTema, string textoDaBusca);
-        PublicacaoQueryResult BuscarPublicacao(Guid idPublicacao);
-        bool SalvarPublicacao(Publicacao publicacao);
-        bool SalvarArquivos(Publicacao publicacao);
-        //Apoio
-        IEnumerable<TipoDeConteudoQueryResult> ListarTipoDeConteudo();
+        IEnumerable<PublicacaoQueryResult> Pesquisar(Guid? idTema, string textoDaBusca);
+        PublicacaoQueryResult Buscar(Guid idPublicacao);
+        bool Salvar(Publicacao obj);
+        bool Desativar(Publicacao obj);
     }
 }

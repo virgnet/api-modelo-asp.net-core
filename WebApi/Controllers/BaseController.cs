@@ -35,45 +35,12 @@ namespace WebApi.Controllers
                 .Build();
 
             if (configuration.GetValue<string>("Host:Development").Equals(host))
-                return configuration.GetConnectionString("DevelopmentConnection");
-            else if (configuration.GetValue<string>("Host:Staging").Equals(host))
-                return configuration.GetConnectionString("StagingConnection");
+                return configuration.GetConnectionString("DefaultConnection");
             else if (configuration.GetValue<string>("Host:Production").Equals(host))
                 return configuration.GetConnectionString("ProductionConnection");
             else
                 return "";
         }
 
-        public string GetConexaoGestao(string host)
-        {
-            configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json")
-                .Build();
-
-            if (configuration.GetValue<string>("Host:Development").Equals(host) || configuration.GetValue<string>("Host:Staging").Equals(host))
-                return configuration.GetConnectionString("GestaoSSStagingConnection");
-            else if (configuration.GetValue<string>("Host:Production").Equals(host))
-                return configuration.GetConnectionString("GestaoSSProductionConnection");
-            else
-                return "";
-        }
-
-        public string GetFileServer(string host)
-        {
-            configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json")
-                .Build();
-
-            if (configuration.GetValue<string>("Host:Development").Equals(host))
-                return configuration.GetValue<string>("FileServer:DevelopmentFile");
-            else if (configuration.GetValue<string>("Host:Staging").Equals(host))
-                return configuration.GetValue<string>("FileServer:StagingFile");
-            else if (configuration.GetValue<string>("Host:Production").Equals(host))
-                return configuration.GetValue<string>("FileServer:ProductionFile");
-            else
-                return "";
-        }
     }
 }

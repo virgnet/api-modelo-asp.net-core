@@ -8,7 +8,7 @@ namespace Domain.Handlers
 {
     public class TemaHandler : Notifiable,
         ICommandHandler<SalvarTemaCommand>,
-        ICommandHandler<SalvarTemaRelacionamentoCommand>
+        ICommandHandler<DesativarTemaCommand>
     {
         private readonly ITemaRepository _repository;
 
@@ -28,7 +28,7 @@ namespace Domain.Handlers
             if (Invalid)
                 return new CommandResult(false, "Por favor, corrija os campos abaixo", Notifications);
 
-            _repository.SalvarTema(obj);
+            _repository.Salvar(obj);
 
             // Retornar o resultado para tela
             return new CommandResult(true, "Cadastro realizado com sucesso.", new
@@ -37,40 +37,12 @@ namespace Domain.Handlers
             });
         }
 
-        public ICommandResult Handle(SalvarTemaRelacionamentoCommand cmd)
-        {
-            // Criar a entidade
-            var obj = new TemaRelacionamento(cmd.IdTema, cmd.IdArea, cmd.IdProjeto, cmd.IdSistema, cmd.IdDocumento);
-
-            // Validar entidades e VOs
-            AddNotifications(obj.Notifications);
-
-            if (Invalid)
-                return new CommandResult(false, "Por favor, corrija os campos abaixo", Notifications);
-
-            _repository.SalvarTemaRelacionamento(obj);
-
-            // Retornar o resultado para tela
-            return new CommandResult(true, "Cadastro realizado com sucesso.", new
-            {
-                obj.IdTemaRelacionamento
-            });
-        }
-
         public ICommandResult Handle(DesativarTemaCommand cmd)
         {
-            _repository.DesativarTema(cmd.IdTema);
+            _repository.Desativar(cmd.IdTema);
 
             // Retornar o resultado para tela
             return new CommandResult(true, "Tema desativado com sucesso.", true);
-        }
-
-        public ICommandResult Handle(ExcluirTemaRelacionamentoCommand cmd)
-        {
-            _repository.ExcluirTemaRelacionamento(cmd.IdTemaRelacionamento);
-
-            // Retornar o resultado para tela
-            return new CommandResult(true, "Relacionamento excluido com sucesso.", true);
         }
     }
 }

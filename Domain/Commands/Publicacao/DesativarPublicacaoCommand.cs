@@ -2,11 +2,11 @@
 using Shared.FluentValidator;
 using System;
 
-namespace Domain.Commands
+namespace Domain.Commands.Publicacao
 {
-    public class ExcluirTemaRelacionamentoCommand : Notifiable, ICommand
+    public class DesativarPublicacaoCommand : Notifiable, ICommand
     {
-        public Guid IdTemaRelacionamento { get; set; }
+        public Guid IdPublicacao { get; set; }
 
         bool ICommand.Valid()
         {

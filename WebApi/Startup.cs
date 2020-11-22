@@ -1,5 +1,4 @@
 ﻿using Domain.Handlers;
-using Domain.Queries;
 using Domain.Repositories;
 using Domain.Services;
 using Infrastructure.DataContext;
@@ -40,19 +39,12 @@ namespace WebApi
             });
 
             //DEPENDENCY INJECTION
-            services.AddScoped<PortalDoColaboradorDataContext, PortalDoColaboradorDataContext>();
-            services.AddTransient<IFuncionarioRepository, FuncionarioRepository>();
-            services.AddTransient<ICalendarioRepository, CalendarioRepository>();
-            services.AddTransient<IComunicadoRepository, ComunicadoRepository>();
-            services.AddTransient<IContatoDiexRepository, ContatoDiexRepository>();
+            services.AddScoped<ModeloDataContext, ModeloDataContext>();
             services.AddTransient<IPublicacaoRepository, PublicacaoRepository>();
             services.AddTransient<ITemaRepository, TemaRepository>();
-            services.AddTransient<IRamalRepository, RamalRepository>();
+            services.AddTransient<IPublicacaoTemaRepository, PublicacaoTemaRepository>();
             services.AddTransient<IAutenticacaoRepository, AutenticacaoRepository>();
             services.AddTransient<IEmailService, EmailService>();
-            services.AddTransient<CalendarioHandler, CalendarioHandler>();
-            services.AddTransient<ComunicadoHandler, ComunicadoHandler>();
-            services.AddTransient<ContatoDiexHandler, ContatoDiexHandler>();
             services.AddTransient<PublicacaoHandler, PublicacaoHandler>();
             services.AddTransient<TemaHandler, TemaHandler>();
 

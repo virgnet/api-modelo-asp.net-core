@@ -1,5 +1,5 @@
 ﻿using Domain.Commands;
-using Domain.Commands.Publicacao;
+using Domain.Commands.PublicacaoTema;
 using Domain.Entities;
 using Domain.Repositories;
 using Shared.Commands;
@@ -7,21 +7,21 @@ using Shared.FluentValidator;
 
 namespace Domain.Handlers
 {
-    public class PublicacaoHandler : Notifiable,
-        ICommandHandler<SalvarPublicacaoCommand>,
-        ICommandHandler<DesativarPublicacaoCommand>
+    public class PublicacaoTemaHandler : Notifiable,
+        ICommandHandler<SalvarPublicacaoTemaCommand>,
+        ICommandHandler<ExcluirPublicacaoTemaCommand>
     {
-        private readonly IPublicacaoRepository _repository;
+        private readonly IPublicacaoTemaRepository _repository;
 
-        public PublicacaoHandler(IPublicacaoRepository repository)
+        public PublicacaoTemaHandler(IPublicacaoTemaRepository repository)
         {
             _repository = repository;
         }
 
-        public ICommandResult Handle(SalvarPublicacaoCommand cmd)
+        public ICommandResult Handle(SalvarPublicacaoTemaCommand cmd)
         {
             // Criar a entidade
-            var obj = new Publicacao(cmd.IdPublicacao, cmd.Identificador, cmd.Titulo, cmd.Conteudo, cmd.DataPublicacao);
+            var obj = new PublicacaoTema();
 
             // Validar entidades e VOs
             AddNotifications(obj.Notifications);
@@ -29,7 +29,7 @@ namespace Domain.Handlers
             if (Invalid)
                 return new CommandResult(false, "Por favor, corrija os campos abaixo", Notifications);
 
-            _repository.Salvar(obj);
+            //_repository.SalvarPublicacao(obj);
 
             // Retornar o resultado para tela
             return new CommandResult(true, "Cadastro realizado com sucesso.", new
@@ -38,11 +38,10 @@ namespace Domain.Handlers
             });
         }
 
-        public ICommandResult Handle(DesativarPublicacaoCommand command)
+        public ICommandResult Handle(ExcluirPublicacaoTemaCommand cmd)
         {
-            var obj = new Publicacao();
-            obj.Desativar();
-            _repository.Desativar(obj);
+            var obj = new PublicacaoTema();
+
             // Retornar o resultado para tela
             return new CommandResult(true, "Desativação realizada com sucesso.", new
             {

@@ -11,9 +11,6 @@ namespace Infrastructure.ConfigurationMap
             builder.HasKey(x => x.IdTema);
             builder.Property(x => x.Ativo).IsRequired();
             builder.Property(x => x.Titulo).IsRequired().HasMaxLength(100).HasColumnType("varchar(100)");
-            builder.Property(x => x.Tags).IsRequired(false).HasMaxLength(500).HasColumnType("varchar(500)");
-            builder.Property(x => x.Imagem).IsRequired(false);
-            builder.Property(x => x.Descricao).IsRequired(false).HasColumnType("varchar(MAX)");
         }
     }
 }
