@@ -6,7 +6,6 @@ using Infrastructure.Repositories;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Swagger;
@@ -33,10 +32,10 @@ namespace WebApi
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1).AddJsonOptions(options =>
-            {
-                options.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.Indented;
-            });
+            //services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1).AddJsonOptions(options =>
+            //{
+            //    options.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.Indented;
+            //});
 
             //DEPENDENCY INJECTION
             services.AddScoped<ModeloDataContext, ModeloDataContext>();
@@ -55,7 +54,7 @@ namespace WebApi
                 x.IncludeXmlComments(xmlPath);
 
                 //SWAGGER
-                x.SwaggerDoc("v1", new Info { Title = Configuration["ApplicationSettings:Name"], Version = Configuration["ApplicationSettings:Version"] });
+                x.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = Configuration["ApplicationSettings:Name"], Version = Configuration["ApplicationSettings:Version"] });
             });
 
             services.AddDistributedRedisCache(options =>

@@ -13,7 +13,7 @@ namespace Infrastructure.ConfigurationMap
             builder.Property(x => x.Titulo).IsRequired().HasMaxLength(200).HasColumnType("varchar(200)");
             builder.Property(x => x.DataCadastro).IsRequired().HasColumnType("datetime");
             builder.Property(x => x.Conteudo).IsRequired(false).HasColumnType("varchar(MAX)");
-            builder.Property(x => x.DataPublicacao).IsRequired(false).HasColumnType("datetime");
+            builder.Property(x => x.DataPublicacao).IsRequired().HasColumnType("datetime");
             builder.Property(x => x.Identificador).IsRequired().HasMaxLength(100).HasColumnType("varchar(100)");
         }
     }

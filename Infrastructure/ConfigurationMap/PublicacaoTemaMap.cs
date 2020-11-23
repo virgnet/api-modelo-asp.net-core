@@ -8,9 +8,8 @@ namespace Infrastructure.ConfigurationMap
     {
         public void Configure(EntityTypeBuilder<PublicacaoTema> builder)
         {
-            builder.HasKey(x => x.IdPublicacao);
+            builder.HasKey(x => new { x.IdPublicacao, x.IdTema });
             builder.Property(x => x.IdPublicacao).IsRequired();
-            builder.HasKey(x => x.IdTema);
             builder.Property(x => x.IdTema).IsRequired();
 
             builder.HasOne(x => x.Publicacao).WithMany(x => x.PublicacoesTemas).HasForeignKey(c => c.IdPublicacao);
