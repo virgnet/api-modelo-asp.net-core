@@ -18,16 +18,16 @@ A api contém 4 projetos sendo os 3 primeiros como principais:
   3. Infraestructure
   4. Shared
 
-#### ApiRest
+#### 1 ApiRest
 Projeto responsável pela interface de comunicação, ou seja, por receber as requisições e direcionar a execução.
 
-#### Domain
+#### 2 Domain
 Projeto responsável pelas entidades.
 
-#### Infraestructure
+#### 3 Infraestructure
 Projeto responsável pela requisição ao banco de dados.
 
-#### Shared
+#### 4 Shared
 O Projeto Shared apesar de não ser colocado como principal, ele serve de apoio para todos os outros. 
 Este contém três subdiretórios.
   - Commands
