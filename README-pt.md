@@ -27,7 +27,7 @@ Projeto responsável pelas entidades.
 #### Infraestructure
 Projeto responsável pela requisição ao banco de dados.
 
-####
+#### Shared
 O Projeto Shared apesar de não ser colocado como principal, ele serve de apoio para todos os outros. 
 Este contém três subdiretórios.
   - Commands
