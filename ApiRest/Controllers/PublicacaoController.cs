@@ -7,7 +7,7 @@ using Shared.Commands;
 using System;
 using System.Collections.Generic;
 
-namespace WebApi.Controllers
+namespace ApiRest.Controllers
 {
     [ApiController]
     public class PublicacaoController : ControllerBase

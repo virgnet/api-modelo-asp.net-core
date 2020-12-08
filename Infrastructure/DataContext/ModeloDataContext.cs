@@ -1,11 +1,10 @@
 ﻿using Domain.Entities;
 using Infrastructure.ConfigurationMap;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Shared.FluentValidator;
+using System;
 using System.Data.SqlClient;
-using System.IO;
 using System.Linq;
 
 namespace Infrastructure.DataContext
@@ -21,37 +20,19 @@ namespace Infrastructure.DataContext
         public DbSet<Tema> Tema { get; set; }
         public DbSet<PublicacaoTema> PublicacaoTema { get; set; }
 
-        
-        //Utilizado somente no update-database
         public ModeloDataContext()
         {
-            //Alterar para o ambiente desejado no momento de criação e atualização do banco de dados
-            string ambiente = "Production";
-            //string ambiente = "Development";
-            //string ambiente = "Staging";
-
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile($"appsettings.{ambiente}.json", optional: false, reloadOnChange: true);
-            Configuration = builder.Build();
-            ConnectionString = Configuration["ConnectionStrings:DefaultConnection"];
-        }
-
-        //Construtor para debug e ambientes publicados
-        public ModeloDataContext(IHostingEnvironment env)
-        {
-            var builder = new ConfigurationBuilder()
-               .SetBasePath(env.ContentRootPath)
-               .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-               .AddJsonFile($"appsettings.Production.json", optional: true);
-
-            Configuration = builder.Build();
-
-            ConnectionString = Configuration["ConnectionStrings:DefaultConnection"];
+            
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            IConfigurationRoot configuration = new ConfigurationBuilder()
+            .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+            .AddJsonFile("appsettings.json")
+            .Build();
+            optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+
             optionsBuilder.UseSqlServer(ConnectionString);
         }
 

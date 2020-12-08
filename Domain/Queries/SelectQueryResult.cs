@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 
-namespace WebApi.QueryResult
+namespace ApiRest.Controllers
 {
     public class SelectQueryResult
     {
